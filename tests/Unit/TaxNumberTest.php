@@ -18,8 +18,9 @@ use PHPUnit\Framework\TestCase;
  * (10 - sum mod 10) mod 10.
  *
  * VAT codes 1 to 5 follow the NAV Online Számla schema (common.xsd, VatCodeType,
- * https://github.com/nav-gov-hu/Online-Invoice). Territorial codes follow
- * https://hu.wikipedia.org/wiki/Adószám, as NAV publishes no official list.
+ * https://github.com/nav-gov-hu/Online-Invoice). Territorial codes follow NAV's
+ * archived taxpayer-data notice
+ * (http://nav.gov.hu/nav/adatbazisok/adatbleker/afaalanyok/afaalany_taj.html).
  * Since 2024 NAV also issues 9-prefixed tax numbers to sole proprietors
  * (https://nav.gov.hu), checked with the same algorithm.
  *

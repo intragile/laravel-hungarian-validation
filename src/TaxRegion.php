@@ -7,9 +7,11 @@ namespace IntrAgile\HungarianValidation;
 /**
  * The territorial code: the last two digits of a Hungarian tax number.
  *
- * NAV publishes no official list; codes and names follow the commonly used
- * table (https://hu.wikipedia.org/wiki/Adószám). Codes 22 to 40 repeat the
- * counties of 02 to 20.
+ * The list follows NAV's "Tájékoztató az áfaalanynak minősülő adózók adataihoz"
+ * (http://nav.gov.hu/nav/adatbazisok/adatbleker/afaalanyok/afaalany_taj.html,
+ * archived 2012–2021 at web.archive.org), which has been unchanged since 2008.
+ * Codes 22 to 40 repeat the counties of 02 to 20. Codes already issued are not
+ * renumbered, so 44 and 51 stay valid after their directorates were merged.
  */
 final class TaxRegion
 {
@@ -60,8 +62,8 @@ final class TaxRegion
         41 => 'Észak-Budapest',
         42 => 'Kelet-Budapest',
         43 => 'Dél-Budapest',
-        44 => 'Kiemelt Adózók Adóigazgatósága',
-        51 => 'Kiemelt Ügyek Adóigazgatósága',
+        44 => 'Kiemelt Adó- és Vámigazgatóság',
+        51 => 'Kiemelt Adó- és Vámigazgatóság',
     ];
 
     private function __construct() {}
