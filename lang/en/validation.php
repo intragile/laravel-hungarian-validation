@@ -44,5 +44,6 @@ return [
         'format' => 'The :attribute field must be a valid Hungarian postal code of 4 digits.',
         'range' => 'The :attribute field is not an existing Hungarian postal code.',
         'not_allowed' => 'The :attribute field must be a Budapest postal code.',
+        'settlement_mismatch' => 'The :attribute field is not a postal code of the given settlement.',
     ],
 ];

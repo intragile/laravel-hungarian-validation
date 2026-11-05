@@ -44,5 +44,6 @@ return [
         'format' => 'A(z) :attribute nem érvényes irányítószám. Az irányítószám 4 számjegyű.',
         'range' => 'A(z) :attribute nem létező irányítószám.',
         'not_allowed' => 'A(z) :attribute nem budapesti irányítószám.',
+        'settlement_mismatch' => 'A(z) :attribute irányítószám nem ehhez a településhez tartozik.',
     ],
 ];

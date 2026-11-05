@@ -24,6 +24,7 @@ enum Violation: string
     case Range = 'range';
     case Length = 'length';
     case NotAllowed = 'not_allowed';
+    case SettlementMismatch = 'settlement_mismatch';
 
     /**
      * A short English description, used in exception messages.
@@ -43,6 +44,7 @@ enum Violation: string
             self::Range => 'value out of range',
             self::Length => 'invalid length',
             self::NotAllowed => 'value not allowed',
+            self::SettlementMismatch => 'settlement does not match',
         };
     }
 }

@@ -74,7 +74,7 @@ final class StringRules
     /**
      * Rules whose parameters reference other fields; Laravel resolves `*` in them.
      */
-    private const array DEPENDENT = ['hu_eu_vat_number', 'hu_tax_id'];
+    private const array DEPENDENT = ['hu_eu_vat_number', 'hu_tax_id', 'hu_postal_code'];
 
     public static function register(Factory $factory): void
     {
@@ -120,9 +120,7 @@ final class StringRules
                     ?? throw new InvalidArgumentException(sprintf('Unknown company form "%s" for validation rule %s.', $form, $name)),
                 self::options($name, $parameters, ['form'])['form'] ?? [],
             )),
-            'hu_postal_code' => new HungarianPostalCode(
-                self::flag($name, 'budapest', self::options($name, $parameters, ['budapest'])),
-            ),
+            'hu_postal_code' => self::postalCode($name, $parameters),
             default => throw new InvalidArgumentException(sprintf('Unknown validation rule: %s.', $name)),
         };
     }
@@ -251,6 +249,16 @@ final class StringRules
         }
 
         return true;
+    }
+
+    /**
+     * @param  list<string>  $parameters
+     */
+    private static function postalCode(string $name, array $parameters): HungarianPostalCode
+    {
+        $options = self::options($name, $parameters, ['budapest', 'settlement']);
+
+        return new HungarianPostalCode(self::flag($name, 'budapest', $options), self::single($name, 'settlement', $options));
     }
 
     /**

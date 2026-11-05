@@ -2,6 +2,7 @@
 
 # Development files are left out of the Composer dist archive.
 /.github            export-ignore
+/bin                export-ignore
 /tests              export-ignore
 /.gitattributes     export-ignore
 /.gitignore         export-ignore
