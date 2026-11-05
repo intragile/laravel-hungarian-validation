@@ -220,3 +220,7 @@ Lásd [SECURITY.md](SECURITY.md).
 
 A kód MIT licencű, lásd [LICENSE](LICENSE). A csomagban lévő irányítószám-adat CC BY 4.0
 licencű, lásd [DATA-LICENSE.md](DATA-LICENSE.md).
+
+---
+
+Fejleszti és karbantartja az [IntrAgile Kft.](https://intragile.eu)

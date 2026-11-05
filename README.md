@@ -220,3 +220,7 @@ See [SECURITY.md](SECURITY.md).
 
 The code is MIT licensed, see [LICENSE](LICENSE). The bundled postal code data is CC BY 4.0,
 see [DATA-LICENSE.md](DATA-LICENSE.md).
+
+---
+
+Developed and maintained by [IntrAgile Kft.](https://intragile.eu).
