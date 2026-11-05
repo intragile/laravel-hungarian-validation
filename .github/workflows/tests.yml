@@ -35,7 +35,9 @@ jobs:
           php: '8.3'
           coverage: none
       - run: composer install --no-dev --no-interaction --no-progress
-      - run: php -r 'require "vendor/autoload.php"; exit(IntrAgile\HungarianValidation\TaxNumber::isValid("10773381-2-44") ? 0 : 1);'
+      - name: Validate with the core only
+        run: |
+          php -r 'require "vendor/autoload.php"; exit(IntrAgile\HungarianValidation\TaxNumber::isValid("10773381-2-44") ? 0 : 1);'
 
   postal-code-data:
     # Weekly check that the bundled postal codes still match the KSH Gazetteer, and that no
