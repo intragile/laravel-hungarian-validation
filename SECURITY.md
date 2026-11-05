@@ -1,5 +1,7 @@
 # Security Policy
 
+Developed and maintained by [IntrAgile Kft.](https://intragile.eu)
+
 ## Reporting a vulnerability
 
 Please report security issues privately to **info@intragile.eu** rather than opening a public
@@ -11,3 +13,7 @@ reply within a few working days.
 This package validates identifiers offline and stores nothing. Validation results say whether a
 value is well-formed, not whether the person, company or account exists. Do not rely on them as
 proof of identity.
+
+---
+
+Developed and maintained by [IntrAgile Kft.](https://intragile.eu).

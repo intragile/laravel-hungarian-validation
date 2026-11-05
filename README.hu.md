@@ -1,5 +1,7 @@
 # Laravel Hungarian Validation
 
+Fejlesztő és karbantartó: [IntrAgile Kft.](https://intragile.eu)
+
 [![Tests](https://github.com/intragile/laravel-hungarian-validation/actions/workflows/tests.yml/badge.svg)](https://github.com/intragile/laravel-hungarian-validation/actions/workflows/tests.yml)
 [![Latest Version](https://img.shields.io/packagist/v/intragile/laravel-hungarian-validation.svg)](https://packagist.org/packages/intragile/laravel-hungarian-validation)
 [![PHP](https://img.shields.io/packagist/php-v/intragile/laravel-hungarian-validation.svg)](https://packagist.org/packages/intragile/laravel-hungarian-validation)

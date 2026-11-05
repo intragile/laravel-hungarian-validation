@@ -1,5 +1,7 @@
 # Data license
 
+Developed and maintained by [IntrAgile Kft.](https://intragile.eu)
+
 The code of this package is MIT licensed (see [LICENSE](LICENSE)). The postal code data file,
 `resources/postal-codes.php`, is **not** covered by the MIT license: it is licensed under the
 [Creative Commons Attribution 4.0 International License (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/).
@@ -34,3 +36,7 @@ conversion is reproducible with `php bin/build-postal-codes.php hnt_letoltes_202
 the source repository.
 
 KSH does not endorse this package or its use of the data.
+
+---
+
+Developed and maintained by [IntrAgile Kft.](https://intragile.eu).
