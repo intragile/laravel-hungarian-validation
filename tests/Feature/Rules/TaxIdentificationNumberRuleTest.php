@@ -53,6 +53,11 @@ final class TaxIdentificationNumberRuleTest extends RuleTestCase
         yield 'other date' => ['1980-01-02', false];
         yield 'rolled-over date' => ['1979-12-32', false];
         yield 'impossible date' => ['1980-02-30', false];
+        yield 'Hungarian date' => ['1980.01.01.', true];
+        yield 'Hungarian date without trailing dot' => ['1980.01.01', true];
+        yield 'Hungarian date with spaces' => ['1980. 01. 01.', true];
+        yield 'Hungarian date with single digits' => ['1980. 1. 1.', true];
+        yield 'Hungarian impossible date' => ['1980.02.30.', false];
         yield 'not a date' => ['not a date', false];
         yield 'empty' => ['', false];
         yield 'null' => [null, false];
@@ -104,5 +109,18 @@ final class TaxIdentificationNumberRuleTest extends RuleTestCase
         $this->expectException(InvalidArgumentException::class);
 
         new HungarianTaxIdentificationNumber('born_on', new DateTimeImmutable('1980-01-01'));
+    }
+
+    public function test_wildcard_birth_date_field(): void
+    {
+        $data = ['items' => [
+            ['tid' => '8412721233', 'born' => '1980-01-01'],
+            ['tid' => '8412721233', 'born' => '1980-01-02'],
+        ]];
+        $mismatch = $this->expected(HungarianTaxIdentificationNumber::messageKey(Violation::BirthDateMismatch), 'items.1.tid');
+
+        foreach ([new HungarianTaxIdentificationNumber('items.*.born'), 'hu_tax_id:birth_date=items.*.born'] as $rule) {
+            self::assertSame(['items.1.tid' => $mismatch], $this->errors($data, ['items.*.tid' => [$rule]]));
+        }
     }
 }

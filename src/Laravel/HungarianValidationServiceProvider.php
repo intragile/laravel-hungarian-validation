@@ -14,8 +14,17 @@ final class HungarianValidationServiceProvider extends ServiceProvider
     public function register(): void
     {
         if (class_exists(Generator::class)) {
-            // Also covers the per-locale generators the fake() helper registers.
+            // Also covers the per-locale generators the fake() helper registers. Those are
+            // cached for the whole process and resolved again by every application instance.
             $this->app->afterResolving(Generator::class, static function (Generator $faker): void {
+                $providers = $faker->getProviders();
+
+                foreach (is_array($providers) ? $providers : [] as $provider) {
+                    if ($provider instanceof HungarianIdentifierProvider) {
+                        return;
+                    }
+                }
+
                 $faker->addProvider(new HungarianIdentifierProvider($faker));
             });
         }

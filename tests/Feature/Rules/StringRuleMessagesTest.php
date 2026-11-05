@@ -107,4 +107,12 @@ final class StringRuleMessagesTest extends RuleTestCase
 
         self::assertSame('A(z) tax ellenőrzőszáma hibás.', $this->message('10537915-4-44', 'hu_tax_number', 'tax'));
     }
+
+    public function test_attribute_with_escaped_dot_gets_reason_message(): void
+    {
+        self::assertSame(
+            ['a.b' => $this->expected(HungarianTaxNumber::messageKey(Violation::Region), 'a.b')],
+            $this->errors(['a.b' => '10537914-4-01'], ['a\\.b' => 'hu_tax_number']),
+        );
+    }
 }

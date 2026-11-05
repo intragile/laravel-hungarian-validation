@@ -74,7 +74,7 @@ final class HungarianTaxIdentificationNumber extends IdentifierRule implements D
             return $violation;
         }
 
-        $birthDate = self::toDate(Arr::get($this->data, $this->birthDateField));
+        $birthDate = self::toDate(Arr::get($this->data, FieldPath::resolve($this->birthDateField, $this->attribute)));
 
         if ($birthDate === null) {
             return Violation::BirthDateMismatch;
@@ -84,7 +84,7 @@ final class HungarianTaxIdentificationNumber extends IdentifierRule implements D
     }
 
     /**
-     * Interprets a field value as a date; strings that PHP parses only with
+     * Interprets a field value as a date, including Hungarian notation; strings that PHP parses only with
      * warnings (such as 1980-02-30) are rejected rather than rolled over.
      */
     private static function toDate(mixed $value): ?DateTimeInterface
@@ -95,6 +95,13 @@ final class HungarianTaxIdentificationNumber extends IdentifierRule implements D
 
         if (! is_string($value) || trim($value) === '') {
             return null;
+        }
+
+        // Hungarian notation: 1980.01.01., 1980. 01. 01. or 1980. 1. 1.
+        if (preg_match('/^\s*(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})\.?\s*\z/', $value, $m) === 1) {
+            return checkdate((int) $m[2], (int) $m[3], (int) $m[1])
+                ? new DateTimeImmutable(sprintf('%04d-%02d-%02d', $m[1], $m[2], $m[3]))
+                : null;
         }
 
         try {

@@ -182,4 +182,20 @@ final class FakerProviderTest extends TestCase
 
         self::provider()->huCompanyRegistrationNumber('99');
     }
+
+    public function test_provider_is_added_once_per_generator(): void
+    {
+        $first = $this->app?->make(Generator::class, ['locale' => 'hu_HU']);
+        $this->app?->make(Generator::class, ['locale' => 'hu_HU']);
+
+        // Laravel caches generators per locale for the process, across application instances.
+        $this->refreshApplication();
+        $this->app?->make(Generator::class, ['locale' => 'hu_HU']);
+
+        self::assertInstanceOf(Generator::class, $first);
+        $providers = $first->getProviders();
+        self::assertIsArray($providers);
+        $providers = array_filter($providers, static fn (mixed $provider): bool => $provider instanceof HungarianIdentifierProvider);
+        self::assertCount(1, $providers);
+    }
 }

@@ -57,7 +57,7 @@ final class HungarianEuVatNumber extends IdentifierRule implements DataAwareRule
             return $violation;
         }
 
-        $taxNumber = Arr::get($this->data, $this->matchesTaxNumberField);
+        $taxNumber = Arr::get($this->data, FieldPath::resolve($this->matchesTaxNumberField, $this->attribute));
         $taxNumber = is_int($taxNumber) && $taxNumber >= 0 ? (string) $taxNumber : $taxNumber;
         $taxNumber = is_string($taxNumber) ? TaxNumber::tryParse($taxNumber) : null;
 

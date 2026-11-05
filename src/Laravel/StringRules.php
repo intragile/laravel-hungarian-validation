@@ -7,6 +7,7 @@ namespace IntrAgile\HungarianValidation\Laravel;
 use Closure;
 use Illuminate\Contracts\Validation\DataAwareRule;
 use Illuminate\Contracts\Validation\Factory;
+use Illuminate\Validation\Factory as ValidationFactory;
 use Illuminate\Validation\Validator;
 use IntrAgile\HungarianValidation\CompanyForm;
 use IntrAgile\HungarianValidation\Laravel\Rules\HungarianBankAccountNumber;
@@ -35,9 +36,14 @@ use WeakMap;
 final class StringRules
 {
     /**
-     * The failure reasons of the latest run, per validator, rule and attribute.
+     * The failure reason of the latest run per validator and rule.
      *
-     * @var WeakMap<Validator, array<string, array<string, Violation>>>
+     * Laravel formats a failure message right after the rule fails, so the latest
+     * reason always belongs to the message being replaced. Keying by attribute
+     * would not work: the extension receives the attribute in its escaped
+     * internal form, the replacer in its display form.
+     *
+     * @var WeakMap<Validator, array<string, Violation>>
      */
     private WeakMap $reasons;
 
@@ -65,12 +71,22 @@ final class StringRules
         ];
     }
 
+    /**
+     * Rules whose parameters reference other fields; Laravel resolves `*` in them.
+     */
+    private const array DEPENDENT = ['hu_eu_vat_number', 'hu_tax_id'];
+
     public static function register(Factory $factory): void
     {
         $registry = new self;
 
         foreach (self::rules() as $name => $class) {
-            $factory->extend($name, $registry->extension($name), self::placeholder($name));
+            if (in_array($name, self::DEPENDENT, true) && $factory instanceof ValidationFactory) {
+                $factory->extendDependent($name, $registry->extension($name), self::placeholder($name));
+            } else {
+                $factory->extend($name, $registry->extension($name), self::placeholder($name));
+            }
+
             $factory->replacer($name, $registry->replacer($name, $class));
         }
     }
@@ -131,13 +147,13 @@ final class StringRules
                 $rule->setData($validator->getData());
             }
 
-            $violation = $rule->violationFor($value);
+            $violation = $rule->violationFor($value, $attribute);
             $reasons = $this->reasons[$validator] ?? [];
 
             if ($violation === null) {
-                unset($reasons[$name][$attribute]);
+                unset($reasons[$name]);
             } else {
-                $reasons[$name][$attribute] = $violation;
+                $reasons[$name] = $violation;
             }
 
             $this->reasons[$validator] = $reasons;
@@ -157,7 +173,7 @@ final class StringRules
                 return $message;
             }
 
-            $violation = $this->reasons[$validator][$name][$attribute] ?? Violation::Format;
+            $violation = $this->reasons[$validator][$name] ?? Violation::Format;
             $translated = $validator->getTranslator()->get($class::messageKey($violation));
 
             if (! is_string($translated)) {

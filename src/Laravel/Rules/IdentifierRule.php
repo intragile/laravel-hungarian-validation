@@ -33,13 +33,18 @@ abstract class IdentifierRule implements ValidationRule
     abstract public static function violations(): array;
 
     /**
+     * The attribute under validation, used to resolve wildcard field references.
+     */
+    protected string $attribute = '';
+
+    /**
      * Returns the first rule the string value breaks, or null when it passes.
      */
     abstract protected function check(string $value): ?Violation;
 
     final public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        $violation = $this->violationFor($value);
+        $violation = $this->violationFor($value, $attribute);
 
         if ($violation !== null) {
             $fail(static::messageKey($violation))->translate();
@@ -49,8 +54,10 @@ abstract class IdentifierRule implements ValidationRule
     /**
      * Returns the reason the value fails the rule, or null when it passes.
      */
-    final public function violationFor(mixed $value): ?Violation
+    final public function violationFor(mixed $value, string $attribute = ''): ?Violation
     {
+        $this->attribute = $attribute;
+
         if (is_int($value)) {
             // A negative number is never an identifier, even though the sign would be stripped as a hyphen.
             if ($value < 0) {

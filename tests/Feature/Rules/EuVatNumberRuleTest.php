@@ -63,4 +63,17 @@ final class EuVatNumberRuleTest extends RuleTestCase
         self::assertSame([], $this->errors(['vat' => 'HU17780010', 'tax' => '17780010-5-44'], $rules));
         self::assertArrayHasKey('vat', $this->errors(['vat' => 'HU17780010', 'tax' => '10537914-4-44'], $rules));
     }
+
+    public function test_wildcard_matches_field(): void
+    {
+        $data = ['items' => [
+            ['vat' => 'HU17780010', 'tax' => '17780010-5-44'],
+            ['vat' => 'HU17780010', 'tax' => '10537914-4-44'],
+        ]];
+        $mismatch = $this->expected(HungarianEuVatNumber::messageKey(Violation::TaxNumberMismatch), 'items.1.vat');
+
+        foreach ([new HungarianEuVatNumber('items.*.tax'), 'hu_eu_vat_number:matches=items.*.tax'] as $rule) {
+            self::assertSame(['items.1.vat' => $mismatch], $this->errors($data, ['items.*.vat' => [$rule]]));
+        }
+    }
 }
