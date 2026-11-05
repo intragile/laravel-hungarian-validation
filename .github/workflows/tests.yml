@@ -1,0 +1,59 @@
+name: tests
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "0 6 * * 1"
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.3', '8.4', '8.5']
+        laravel: ['12.*', '13.*']
+    name: PHP ${{ matrix.php }} / Laravel ${{ matrix.laravel }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php: ${{ matrix.php }}
+          coverage: none
+      - run: composer require --dev "illuminate/support:${{ matrix.laravel }}" --no-update --no-interaction
+      - run: composer update --prefer-dist --no-interaction --no-progress
+      - run: vendor/bin/phpunit
+      - run: vendor/bin/phpstan analyse --memory-limit=1G
+      - run: vendor/bin/pint --test
+
+  core-without-laravel:
+    # The core must install and run with no framework packages present.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php: '8.3'
+          coverage: none
+      - run: composer install --no-dev --no-interaction --no-progress
+      - run: php -r 'require "vendor/autoload.php"; exit(IntrAgile\HungarianValidation\TaxNumber::isValid("10773381-2-44") ? 0 : 1);'
+
+  postal-code-data:
+    # Weekly check that the bundled postal codes still match the KSH Gazetteer, and that no
+    # newer edition has been published.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php: '8.3'
+          extensions: zip, dom
+          coverage: none
+      - run: curl -fsSL -o /tmp/hnt.xlsx https://www.ksh.hu/docs/helysegnevtar/hnt_letoltes_2026.xlsx
+      - run: php bin/build-postal-codes.php /tmp/hnt.xlsx --check
+      - name: Fail when a newer edition exists
+        run: |
+          next=$(( 2026 + 1 ))
+          if curl -fsI "https://www.ksh.hu/docs/helysegnevtar/hnt_letoltes_${next}.xlsx" > /dev/null; then
+            echo "KSH has published the ${next} edition; regenerate resources/postal-codes.php."
+            exit 1
+          fi
