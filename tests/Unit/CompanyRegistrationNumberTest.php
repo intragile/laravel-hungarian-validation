@@ -176,7 +176,11 @@ final class CompanyRegistrationNumberTest extends TestCase
         }
 
         self::assertSame('Fővárosi Törvényszék Cégbírósága', CompanyCourt::from('01')->label());
-        self::assertStringContainsString('Pest', CompanyCourt::from('13')->label());
+        self::assertSame('Budapest Környéki Törvényszék Cégbírósága (Pest megye)', CompanyCourt::from('13')->label());
+
+        foreach (CompanyCourt::cases() as $court) {
+            self::assertStringNotContainsString('vármegye', $court->label());
+        }
     }
 
     public function test_form_cases(): void

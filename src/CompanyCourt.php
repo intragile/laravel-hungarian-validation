@@ -7,7 +7,7 @@ namespace IntrAgile\HungarianValidation;
 /**
  * Court of registration, the first two digits of a company registration number.
  *
- * Case names are the county (vármegye) each court of registration serves;
+ * Case names are the county (megye) each court of registration serves;
  * code 01 is the capital.
  */
 enum CompanyCourt: string
@@ -51,7 +51,7 @@ enum CompanyCourt: string
             self::Heves => 'Egri Törvényszék Cégbírósága',
             self::KomaromEsztergom => 'Tatabányai Törvényszék Cégbírósága',
             self::Nograd => 'Balassagyarmati Törvényszék Cégbírósága',
-            self::Pest => 'Budapest Környéki Törvényszék Cégbírósága (Pest vármegye)',
+            self::Pest => 'Budapest Környéki Törvényszék Cégbírósága (Pest megye)',
             self::Somogy => 'Kaposvári Törvényszék Cégbírósága',
             self::SzabolcsSzatmarBereg => 'Nyíregyházi Törvényszék Cégbírósága',
             self::JaszNagykunSzolnok => 'Szolnoki Törvényszék Cégbírósága',
